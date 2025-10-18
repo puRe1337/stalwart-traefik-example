@@ -5,7 +5,7 @@ services:
         - ./data:/opt/stalwart-mail
         - ../traefik/letsencrypt/dumped:/opt/certs:ro
     container_name: stalwart-mail
-    image: stalwartlabs/mail-server:latest
+    image: stalwartlabs/stalwart:v0.13.3
     security_opt: [no-new-privileges:true]
     ports:
         - 25:25
