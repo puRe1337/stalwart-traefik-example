@@ -1,0 +1,5 @@
+tcp:
+  serversTransports:
+    stalwart-proxyprotocol:
+      proxyProtocol:
+        version: 2

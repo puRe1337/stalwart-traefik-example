@@ -25,28 +25,29 @@ services:
       - traefik.tcp.routers.jmap.tls.passthrough=true
       - traefik.tcp.routers.jmap.service=jmap
       - traefik.tcp.services.jmap.loadbalancer.server.port=443
-      - traefik.tcp.services.jmap.loadbalancer.proxyProtocol.version=2
+      - traefik.tcp.services.jmap.loadbalancer.serversTransport=stalwart-proxyprotocol@file
       # esmtp
       - traefik.tcp.routers.esmtp.rule=HostSNI(`*`)
       - traefik.tcp.routers.esmtp.entrypoints=esmtp
       - traefik.tcp.routers.esmtp.tls.passthrough=true
       - traefik.tcp.routers.esmtp.service=esmtp
       - traefik.tcp.services.esmtp.loadbalancer.server.port=465
-      - traefik.tcp.services.esmtp.loadbalancer.proxyProtocol.version=2
+      - traefik.tcp.services.esmtp.loadbalancer.serversTransport=stalwart-proxyprotocol@file
       # imap-ssl
       - traefik.tcp.routers.imap-ssl.rule=HostSNI(`*`)
       - traefik.tcp.routers.imap-ssl.entrypoints=imap-ssl
       - traefik.tcp.routers.imap-ssl.tls.passthrough=true
       - traefik.tcp.routers.imap-ssl.service=imap-ssl
       - traefik.tcp.services.imap-ssl.loadbalancer.server.port=993
-      - traefik.tcp.services.imap-ssl.loadbalancer.proxyProtocol.version=2
+      - traefik.tcp.services.imap-ssl.loadbalancer.serversTransport=stalwart-proxyprotocol@file
       # sieve
+      # I dont use this in my current setup, this can be wrong - feel free to create a PR if you find an issue
       - traefik.tcp.routers.sieve.rule=HostSNI(`*`)
       - traefik.tcp.routers.sieve.entrypoints=sieve
       - traefik.tcp.routers.sieve.tls.passthrough=true
       - traefik.tcp.routers.sieve.service=sieve
       - traefik.tcp.services.sieve.loadbalancer.server.port=4190
-      - traefik.tcp.services.sieve.loadbalancer.proxyProtocol.version=2
+      - traefik.tcp.services.sieve.loadbalancer.serversTransport=stalwart-proxyprotocol@file
     networks:
       proxy:
         ipv4_address: 172.18.0.21
