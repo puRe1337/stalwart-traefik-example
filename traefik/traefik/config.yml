@@ -45,6 +45,12 @@ entryPoints:
       trustedIPs: 
         - 172.18.0.20
         - 172.18.0.21
+  pop3-ssl:
+    address: ":995"
+    proxyProtocol:
+      trustedIPs:
+        - 172.18.0.20
+        - 172.18.0.21
   sieve:
     address: ":4190"
     proxyProtocol:

@@ -8,9 +8,10 @@ services:
     image: stalwartlabs/stalwart:v0.13.3
     security_opt: [no-new-privileges:true]
     ports:
-        - 25:25
-        - 143:143
-        - 587:587
+      - 25:25 # SMTP
+      - 110:110 # POP3
+      - 143:143 # IMAP
+      - 587:587 # SMTP with STARTTLS (starts unencrypted, then upgrades to TLS with STARTTLS)
     labels:
       - "traefik.enable=true"
       # admin ui
@@ -40,6 +41,13 @@ services:
       - traefik.tcp.routers.imap-ssl.service=imap-ssl
       - traefik.tcp.services.imap-ssl.loadbalancer.server.port=993
       - traefik.tcp.services.imap-ssl.loadbalancer.serversTransport=stalwart-proxyprotocol@file
+      # pop3-ssl
+      - traefik.tcp.routers.pop3-ssl.rule=HostSNI(`*`)
+      - traefik.tcp.routers.pop3-ssl.entrypoints=pop3-ssl
+      - traefik.tcp.routers.pop3-ssl.tls.passthrough=true
+      - traefik.tcp.routers.pop3-ssl.service=pop3-ssl
+      - traefik.tcp.services.pop3-ssl.loadbalancer.server.port=995
+      - traefik.tcp.services.pop3-ssl.loadbalancer.serversTransport=stalwart-proxyprotocol@file
       # sieve
       # I dont use this in my current setup, this can be wrong - feel free to create a PR if you find an issue
       - traefik.tcp.routers.sieve.rule=HostSNI(`*`)
