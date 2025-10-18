@@ -15,9 +15,14 @@ services:
     labels:
       - "traefik.enable=true"
       # admin ui
-      - traefik.http.routers.stalwart.rule=Host(`mail.example.com`)
+      - traefik.http.routers.stalwart.rule=HostRegexp(`^(mail|autodiscover|autoconfig|mta-sts)\.(example\.com)$`)
       - traefik.http.routers.stalwart.entrypoints=https
       - traefik.http.routers.stalwart.tls.certresolver=le
+
+      # get the certs for all domains including SANs, make sure to add your domains here
+      # the SANs are important to get a valid cert for autodiscover/autoconfig/mta-sts
+      - "traefik.http.routers.stalwart.tls.domains[0].main=mail.example.com"
+      - "traefik.http.routers.stalwart.tls.domains[0].sans=mail.example.com,mail.foo.bar,autodiscover.example.com,autodiscover.foo.bar,autoconfig.example.com,autoconfig.foo.bar,mta-sts.example.com,mta-sts.foo.bar"
       - traefik.http.routers.stalwart.service=stalwart
       - traefik.http.services.stalwart.loadbalancer.server.port=8080
       # jmap
