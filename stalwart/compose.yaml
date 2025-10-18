@@ -12,6 +12,7 @@ services:
       - 110:110 # POP3
       - 143:143 # IMAP
       - 587:587 # SMTP with STARTTLS (starts unencrypted, then upgrades to TLS with STARTTLS)
+      - 4190:4190 # Sieve
     labels:
       - "traefik.enable=true"
       # admin ui
@@ -53,14 +54,14 @@ services:
       - traefik.tcp.routers.pop3-ssl.service=pop3-ssl
       - traefik.tcp.services.pop3-ssl.loadbalancer.server.port=995
       - traefik.tcp.services.pop3-ssl.loadbalancer.serversTransport=stalwart-proxyprotocol@file
-      # sieve
+      # Sieve
       # I dont use this in my current setup, this can be wrong - feel free to create a PR if you find an issue
-      - traefik.tcp.routers.sieve.rule=HostSNI(`*`)
-      - traefik.tcp.routers.sieve.entrypoints=sieve
-      - traefik.tcp.routers.sieve.tls.passthrough=true
-      - traefik.tcp.routers.sieve.service=sieve
-      - traefik.tcp.services.sieve.loadbalancer.server.port=4190
-      - traefik.tcp.services.sieve.loadbalancer.serversTransport=stalwart-proxyprotocol@file
+      # - traefik.tcp.routers.sieve.rule=HostSNI(`*`)
+      # - traefik.tcp.routers.sieve.entrypoints=sieve
+      # - traefik.tcp.routers.sieve.tls.passthrough=true
+      # - traefik.tcp.routers.sieve.service=sieve
+      # - traefik.tcp.services.sieve.loadbalancer.server.port=4190
+      # - traefik.tcp.services.sieve.loadbalancer.serversTransport=stalwart-proxyprotocol@file
     networks:
       proxy:
         ipv4_address: 172.18.0.21

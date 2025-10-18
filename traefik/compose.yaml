@@ -11,7 +11,7 @@ services:
       - "465:465" # ESMTP submission, implicit TLS
       - "993:993" # IMAP4 secure, implicit TLS
       - "995:995" # POP3 secure, implicit TLS
-      - "4190:4190" # sieve
+      # - "4190:4190" # Sieve
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
