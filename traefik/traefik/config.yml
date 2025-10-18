@@ -1,0 +1,63 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false  # true by default
+
+api:
+  # Dashboard
+  #
+  # Optional
+  # Default: true
+  #
+  dashboard: true
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: proxy
+  file:
+    # watch for dynamic configuration changes
+    directory: /etc/traefik
+    watch: true
+
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          priority: 1000
+          to: "https"
+          scheme: "https"
+  https:
+    address: ":443"
+    http:
+      tls:
+        certResolver: le
+  esmtp:
+    address: ":465"
+    proxyProtocol:
+      trustedIPs: 
+        - 172.18.0.20
+        - 172.18.0.21
+  imap-ssl:
+    address: ":993"
+    proxyProtocol:
+      trustedIPs: 
+        - 172.18.0.20
+        - 172.18.0.21
+  sieve:
+    address: ":4190"
+    proxyProtocol:
+      trustedIPs: 
+        - 172.18.0.20
+        - 172.18.0.21
+
+certificatesResolvers:
+  le:
+    acme:
+      # tlschallenge: true
+      email: "mail@example.com"
+      storage: "/letsencrypt/acme.json"
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      dnsChallenge:
+        provider: cloudflare

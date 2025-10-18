@@ -1,0 +1,56 @@
+---
+services:
+  mail-server:
+    volumes:
+        - ./data:/opt/stalwart-mail
+        - ../traefik/letsencrypt/dumped:/opt/certs:ro
+    container_name: stalwart-mail
+    image: stalwartlabs/mail-server:latest
+    security_opt: [no-new-privileges:true]
+    ports:
+        - 25:25
+        - 143:143
+        - 587:587
+    labels:
+      - "traefik.enable=true"
+      # admin ui
+      - traefik.http.routers.stalwart.rule=Host(`mail.example.com`)
+      - traefik.http.routers.stalwart.entrypoints=https
+      - traefik.http.routers.stalwart.tls.certresolver=le
+      - traefik.http.routers.stalwart.service=stalwart
+      - traefik.http.services.stalwart.loadbalancer.server.port=8080
+      # jmap
+      - traefik.tcp.routers.jmap.rule=HostSNI(`*`)
+      - traefik.tcp.routers.jmap.entrypoints=https
+      - traefik.tcp.routers.jmap.tls.passthrough=true
+      - traefik.tcp.routers.jmap.service=jmap
+      - traefik.tcp.services.jmap.loadbalancer.server.port=443
+      - traefik.tcp.services.jmap.loadbalancer.proxyProtocol.version=2
+      # esmtp
+      - traefik.tcp.routers.esmtp.rule=HostSNI(`*`)
+      - traefik.tcp.routers.esmtp.entrypoints=esmtp
+      - traefik.tcp.routers.esmtp.tls.passthrough=true
+      - traefik.tcp.routers.esmtp.service=esmtp
+      - traefik.tcp.services.esmtp.loadbalancer.server.port=465
+      - traefik.tcp.services.esmtp.loadbalancer.proxyProtocol.version=2
+      # imap-ssl
+      - traefik.tcp.routers.imap-ssl.rule=HostSNI(`*`)
+      - traefik.tcp.routers.imap-ssl.entrypoints=imap-ssl
+      - traefik.tcp.routers.imap-ssl.tls.passthrough=true
+      - traefik.tcp.routers.imap-ssl.service=imap-ssl
+      - traefik.tcp.services.imap-ssl.loadbalancer.server.port=993
+      - traefik.tcp.services.imap-ssl.loadbalancer.proxyProtocol.version=2
+      # sieve
+      - traefik.tcp.routers.sieve.rule=HostSNI(`*`)
+      - traefik.tcp.routers.sieve.entrypoints=sieve
+      - traefik.tcp.routers.sieve.tls.passthrough=true
+      - traefik.tcp.routers.sieve.service=sieve
+      - traefik.tcp.services.sieve.loadbalancer.server.port=4190
+      - traefik.tcp.services.sieve.loadbalancer.proxyProtocol.version=2
+    networks:
+      proxy:
+        ipv4_address: 172.18.0.21
+
+networks:
+  proxy:
+    external: true

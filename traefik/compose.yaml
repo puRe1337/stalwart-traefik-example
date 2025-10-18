@@ -1,0 +1,38 @@
+---
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      # Mailserver
+      - "465:465" # ESMTP submission, implicit TLS
+      - "993:993" # IMAP4 secure, implicit TLS
+      - "4190:4190" # sieve
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+      - ./traefik:/etc/traefik
+    networks:
+      proxy:
+        ipv4_address: 172.18.0.20
+
+    environment:
+      - CLOUDFLARE_EMAIL=MAIL
+      - CLOUDFLARE_DNS_API_TOKEN=TOKEN
+  certdumper:
+    image: ghcr.io/kereis/traefik-certs-dumper:latest
+    volumes:
+      - ./letsencrypt:/traefik:ro
+      - ./letsencrypt/dumped:/output:rw
+
+networks:
+  proxy:
+    name: proxy
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
