@@ -10,7 +10,10 @@ server.hostname = "mail.example.com"
 server.http.allowed-endpoint = 200
 server.http.hsts = false
 server.http.permissive-cors = false
-server.http.url = "protocol + '://' + key_get('default', 'hostname') + ':' + local_port"
+# I needed to set the protocol here to https while I was having issues using a JMAP client
+# otherwise Stalwart told a wrong URL like http://mail.example.com:8080/.well-known/jmap 
+# since we use traefik in front, we (probably) always have https://mail.example.com/.well-known/jmap without a port
+server.http.url = "protocol + 's://' + key_get('default', 'hostname')"
 server.http.use-x-forwarded = true
 server.listener.http.bind = "[::]:8080"
 server.listener.http.protocol = "http"
