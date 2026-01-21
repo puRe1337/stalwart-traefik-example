@@ -16,4 +16,4 @@ I created this repo since I get more comments on my gist [here](https://gist.git
 ### SIEVE 4190
 `openssl s_client -showcerts -servername mail.example.com -connect mail.example.com:4190`
 ### JMAP 443
-`curl -u admin:'password' https://mail.example.com/.well-known/jmap`
+`curl -iL -u admin:'password' https://mail.example.com/.well-known/jmap`
