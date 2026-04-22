@@ -1,6 +1,10 @@
 # Stalwart Setup with Traefik
 I created this repo since I get more comments on my gist [here](https://gist.github.com/puRe1337/cdecc97307cc19c6d899a204b510834e). Feel free to open an Issue to ask something or share your thoughts.
 
+> [!NOTE]
+If you are looking for the v0.16.0 configuration, please refer directly to the Stalwart documentation, since the Stalwart configuration has undergone breaking changes.
+> https://stalw.art/docs/server/reverse-proxy/traefik
+
 # Test commands with openssl
 
 ### SMTP 25
